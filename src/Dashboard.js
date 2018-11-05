@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext, useMemo } from 'react';
+import { Context } from './App.js';
 
 const fetchUsers = () => {
   return new Promise((resolve, reject) => {
@@ -26,10 +27,23 @@ const fetchUsers = () => {
   });
 };
 
-const Dashboard = ({ dispatch, state }) => {
+const styles = {
+  width: '500px',
+  margin: '0 auto',
+  padding: '20px',
+};
+
+const Dashboard = () => {
+  const { dispatch, state } = useContext(Context);
   const { errorMessage, users, isLoading } = state;
+  const computeStyles = useMemo(
+    () => {
+      return styles;
+    },
+    [styles],
+  );
   return (
-    <div style={{ width: '500px', margin: '0 auto', padding: '20px' }}>
+    <div style={computeStyles}>
       <button
         disabled={users.length}
         onClick={e => {
@@ -48,16 +62,21 @@ const Dashboard = ({ dispatch, state }) => {
       <hr />
       {errorMessage && errorMessage}
       {isLoading && <div> LOADING USERS... </div>}
-      {users &&
-        users.map(user => {
-          return (
-            <div key={user.id}>
-              {user.name} {user.id}
-              <hr />
-            </div>
-          );
-        })}
+      {useMemo(() =>
+          users.map(
+            user => {
+              return (
+                <div key={user.id}>
+                  {user.name} {user.id}
+                  <hr />
+                </div>
+              );
+            },
+            [users],
+          ),
+        )}
     </div>
   );
 };
+
 export default Dashboard;

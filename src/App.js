@@ -4,7 +4,7 @@ import './App.css';
 import Dashboard from './Dashboard.js';
 
 const Context = React.createContext();
-const { Consumer, Provider } = Context;
+const { Provider } = Context;
 
 const initialState = {
   users: [],
@@ -51,9 +51,9 @@ const App = () => {
   };
   return (
     <Provider value={store}>
-      <Consumer>{store => <Dashboard {...store} />}</Consumer>
+      <Dashboard />
     </Provider>
   );
 };
 
-export default App;
+export { Context, App as default };
